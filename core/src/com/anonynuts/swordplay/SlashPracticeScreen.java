@@ -1,6 +1,7 @@
 package com.anonynuts.swordplay;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,7 +11,7 @@ import com.badlogic.gdx.input.GestureDetector;
 
 import java.util.Random;
 
-public class Swordplay extends ApplicationAdapter {
+public class SlashPracticeScreen extends DefaultScreen {
 
 	CutType[] cutTypes = new CutType[]{CutType.TONDO, CutType.RIVERSO_TONDO, CutType.FEDENTE, CutType.MONTANTE};
 	CutType currentCutType;
@@ -26,8 +27,12 @@ public class Swordplay extends ApplicationAdapter {
 	int width;
 	int height;
 
+	public SlashPracticeScreen(Game game) {
+		super(game);
+	}
+
 	@Override
-	public void create () {
+	public void show () {
 		random = new Random();
 		hitMessage = "";
 		int newCutIndex = random.nextInt(cutTypes.length);
@@ -53,7 +58,7 @@ public class Swordplay extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.app.log("Slasher", slashListener.getCutTypeDisplay());
@@ -61,13 +66,15 @@ public class Swordplay extends ApplicationAdapter {
 		batch.begin();
 		font.draw(batch, currentCutType.display(), 200, 400);
 
-		if (Gdx.input.justTouched()) {
+		if (slashListener.isSlashComplete()) {
 			if (slashListener.isCorrectCut(currentCutType)) {
 				hitMessage = "DIRECT HIT!!!";
 				int newCutIndex = random.nextInt(cutTypes.length);
 				currentCutType = cutTypes[newCutIndex];
+				slashListener.startSlash();
 			} else {
 				hitMessage = "MISS!";
+				slashListener.startSlash();
 			}
 		}
 

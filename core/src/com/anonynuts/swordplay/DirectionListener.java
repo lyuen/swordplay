@@ -23,13 +23,14 @@ public class DirectionListener extends GestureDetector.GestureAdapter {
 			}else{
 				slashListener.slashLeft();
 			}
-		}else{
+		} else{
 			if(velocityY>0){
 				slashListener.slashDown();
 			}else{
 				slashListener.slashUp();
 			}
 		}
+		slashListener.endSlash();
 		return super.fling(velocityX, velocityY, button);
 	}
 
